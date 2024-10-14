@@ -1,0 +1,102 @@
+---
+title: "R Markdown Test"
+author: "Simon Rütten"
+date: "2024-07-15"
+output:
+  html_document:
+    css: styles.css
+params:
+  n: 100
+  mean: 0
+  sd: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plotly)
+library(ggplot2)
+library(DT)
+library(shiny)
+library(leaflet)
+library(crosstalk)
+
+# Setting relative file paths 
+install.packages("here")
+library(here)
+here::here()
+#Testing relative file paths 
+data <- read.csv(here("01_input_data", "WDICountry.csv"))
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Interactive Visualizations
+
+```{r interactive, echo=FALSE}
+
+# Create a ggplot2 object
+p <- ggplot(mtcars, aes(x = wt, y = mpg, color = as.factor(cyl))) + 
+  geom_point() +
+  labs(title = "Scatter plot of Weight vs. MPG", color = "Cylinders")
+
+# Convert ggplot2 object to plotly object
+ggplotly(p)
+```
+
+## Tables
+
+```{r tables, echo=FALSE}
+datatable(mtcars, options = list(pageLength = 5))
+```
+
+## Interactive Widgets
+
+```{r widgets, echo=FALSE}
+sliderInput("num", "Choose a number:", 1, 100, 50)
+renderPlot({
+  hist(rnorm(input$num), main = "Histogram of Random Numbers")
+})
+```
+
+## Interactive Maps
+
+```{r maps, echo=FALSE}
+leaflet() %>%
+  addTiles() %>%
+  addMarkers(lng = -93.65, lat = 42.0285, popup = "Iowa State University")
+```
+
+## Parameterized Reports
+
+```{r reports, echo=FALSE}
+set.seed(123)
+data <- rnorm(params$n, mean = params$mean, sd = params$sd)
+hist(data, main = paste("Histogram of", params$n, "random numbers"))
+```
+
+## Filtering
+
+```{r filter, echo=FALSE}
+shared_mtcars <- SharedData$new(mtcars)
+plot_ly(shared_mtcars, x = ~wt, y = ~mpg, color = ~as.factor(cyl), mode = 'markers') %>%
+  layout(title = "Scatter plot of Weight vs. MPG")
+datatable(shared_mtcars, options = list(pageLength = 5))
+```
