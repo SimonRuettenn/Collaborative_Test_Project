@@ -26,6 +26,13 @@ library(here)
 here::here()
 #Testing relative file paths 
 data <- read.csv(here("01_input_data", "WDICountry.csv"))
+
+#saving in GitHub
+#git remote add origin https://github.com/SimonRuettenn/Collaborative_Test_Project.git (run in Terminal)
+#setting brach name 
+#git branch -M main (run in Terminal)
+#pushing to GitHub
+#git push -u origin main (run in Terminal)
 ```
 
 ## R Markdown
